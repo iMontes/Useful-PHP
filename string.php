@@ -4,14 +4,38 @@
  *
  * @param   string  $possible_email  An email address to validate
  * @return  bool
- *
- * @access  public
- * @since   1.0.000
- * @static
  */
-public static function validate_email( $possible_email )
+function validate_email( $possible_email )
 {
     return filter_var( $possible_email, FILTER_VALIDATE_EMAIL );
+}
+
+
+/**
+ * Base64 encoding String
+ *
+ * @param string $string String to be encoded
+ * @return string
+ */
+function base64url_encode($string) {
+    $base64 = base64_encode($plainText);
+    $base64url = strtr($base64, '+/=', '-_,');
+
+    return $base64url;
+}
+
+
+/**
+ * Base64 decoding String
+ *
+ * @param string $string String to be decoded
+ * @return string
+ */
+function base64url_decode($string) {
+    $base64url = strtr($plainText, '-_,', '+/=');
+    $base64 = base64_decode($base64url);
+
+    return $base64;
 }
 
 
@@ -159,30 +183,6 @@ function safeFilename($filename) {
 
 
 /**
- * Convert entities, while preserving already-encoded entities
- *
- * @param   string  $string  The text to be converted
- * @return  string
- *
- * @link    http://ca2.php.net/manual/en/function.htmlentities.php#90111
- *
- * @access  public
- * @since   1.0.000
- * @static
- */
-public static function htmlentities( $string, $preserve_encoded_entities = false )
-{
-    if ( $preserve_encoded_entities ) {
-        $translation_table = get_html_translation_table( HTML_ENTITIES, ENT_QUOTES );
-        $translation_table[chr(38)] = '&';
-        return preg_replace( '/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,3};)/', '&amp;', strtr( $string, $translation_table ) );
-    } else {
-        return htmlentities( $string, ENT_QUOTES );
-    }
-}
-
-
-/**
  * Converts all accent characters to ASCII characters
  *
  * If there are no accent characters, then the string given is just
@@ -190,14 +190,8 @@ public static function htmlentities( $string, $preserve_encoded_entities = false
  *
  * @param   string  $string  Text that might have accent characters
  * @return  string  Filtered string with replaced "nice" characters
- *
- * @link    http://codex.wordpress.org/Function_Reference/remove_accents
- *
- * @access  public
- * @since   1.0.000
- * @static
  */
-public static function remove_accents( $string )
+function remove_accents( $string )
 {
     if ( ! preg_match( '/[\x80-\xff]/', $string ) ) {
         return $string;
